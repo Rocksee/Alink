@@ -47,8 +47,8 @@ public class CrosstabTest extends AlinkTestBase {
 
 		Crosstab crossTableCom = Crosstab.merge(crossTable, crossTable);
 
-		List <String> rowTags = crossTable.rowTags;
-		List <String> colTags = crossTable.colTags;
+		List <String> rowTags = crossTableCom.rowTags;
+		List <String> colTags = crossTableCom.colTags;
 
 		assertEquals(6.0, crossTableCom.data[rowTags.indexOf("f0")][colTags.indexOf("f2")], 10e-4);
 	}
