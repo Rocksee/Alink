@@ -25,9 +25,11 @@ jobs:
           java -version
           mvn -v
 
-      - name: Build all (skip tests)
+      - name: Build only the core module deps (skip tests)
         run: |
-          mvn -B -DskipTests install
+          mvn -B -DskipTests \
+            -pl :alink_core_flink-1.13_2.11 -am \
+            install
 
       #should pass
       - name: Baseline test (no NonDex)
