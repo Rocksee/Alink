@@ -34,14 +34,18 @@ jobs:
       #should pass
       - name: Baseline test (no NonDex)
         run: |
-          mvn -B -pl :alink_core_flink-1.13_2.11 -am \
+          mvn -B \
+            -pl :alink_core_flink-1.13_2.11 \
             -Dtest="com.alibaba.alink.operator.common.statistics.CrosstabTest#merge" \
-            -DfailIfNoTests=false test
+            -DfailIfNoTests=false -Dsurefire.failIfNoSpecifiedTests=false \
+            test
+            
       #should fail
       - name: NonDex test (expect failure if flaky)
         continue-on-error: true
         run: |
-          mvn -B -pl :alink_core_flink-1.13_2.11 -am \
+          mvn -B \
+            -pl :alink_core_flink-1.13_2.11 \
             edu.illinois:nondex-maven-plugin:2.1.1:nondex \
             -Dtest="com.alibaba.alink.operator.common.statistics.CrosstabTest#merge" \
-            -DfailIfNoTests=false
+            -DfailIfNoTests=false -Dsurefire.failIfNoSpecifiedTests=false
