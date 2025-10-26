@@ -25,6 +25,10 @@ jobs:
           java -version
           mvn -v
 
+      - name: Build all (skip tests)
+        run: |
+          mvn -B -DskipTests install
+
       #should pass
       - name: Baseline test (no NonDex)
         run: |
