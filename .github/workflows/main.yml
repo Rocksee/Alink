@@ -1,0 +1,41 @@
+name: Flaky test check (NonDex)
+
+on:
+  push:
+    branches: [ "nondex-check", "fix-flaky", "*" ]
+  pull_request:
+
+jobs:
+  nondex:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 8 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
+
+      - name: Show versions
+        run: |
+          java -version
+          mvn -v
+
+      #should pass
+      - name: Baseline test (no NonDex)
+        run: |
+          mvn -B -pl :alink_core_flink-1.13_2.11 -am \
+            -Dtest="com.alibaba.alink.operator.common.statistics.CrosstabTest#merge" \
+            -DfailIfNoTests=false test
+      #should fail
+      - name: NonDex test (expect failure if flaky)
+        continue-on-error: true
+        run: |
+          mvn -B -pl :alink_core_flink-1.13_2.11 -am \
+            edu.illinois:nondex-maven-plugin:2.1.1:nondex \
+            -Dtest="com.alibaba.alink.operator.common.statistics.CrosstabTest#merge" \
+            -DfailIfNoTests=false
